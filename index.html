@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#1B3A5C">
+  <title>Datos Pre-Consulta</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+:root{--azul-profundo:#1B3A5C;--azul-medio:#2E6B9E;--azul-cielo:#5BA4D9;--azul-hielo:#D6E8F7;--metal-claro:#E8EEF4;--metal-medio:#C4D1DE;--metal-oscuro:#8A9BB0;--blanco-hielo:#F7F9FC;--blanco-puro:#FFFFFF;--gris-suave:#E2E8F0;--exito:#10B981;--error:#EF4444;--advertencia:#F59E0B;--texto-principal:#1B3A5C;--texto-secundario:#5A7A9B;--shadow-raised:6px 6px 12px #B8C4D3,-4px -4px 8px #FFFFFF;--shadow-pressed:inset 3px 3px 6px #153050,inset -2px -2px 4px #3A7FBF;--shadow-card:0 4px 20px rgba(27,58,92,.08),0 1px 3px rgba(27,58,92,.06);--shadow-input-inset:inset 2px 2px 4px #C4D1DE,inset -1px -1px 2px #FFF;--radius-sm:8px;--radius-md:12px;--radius-lg:16px;--radius-xl:24px;--radius-full:9999px}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{font-family:'DM Sans',-apple-system,sans-serif;background:var(--blanco-hielo);color:var(--texto-principal);min-height:100dvh;line-height:1.5;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+.app-container{max-width:480px;margin:0 auto;padding:0 20px 40px}
+.app-header{position:sticky;top:0;z-index:100;background:rgba(247,249,252,.88);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);padding:16px 0 12px;border-bottom:1px solid rgba(196,209,222,.3)}
+.clinic-brand{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+.clinic-logo{width:42px;height:42px;background:linear-gradient(135deg,var(--azul-medio),var(--azul-profundo));border-radius:var(--radius-md);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.clinic-logo svg{width:24px;height:24px;color:#fff}
+.clinic-info h1{font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:17px;color:var(--azul-profundo);line-height:1.2}
+.clinic-info p{font-size:13px;color:var(--texto-secundario)}
+.progress-bar{display:flex;align-items:center;justify-content:center}
+.progress-dot{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;transition:all .4s cubic-bezier(.4,0,.2,1)}
+.progress-dot.completed{background:var(--azul-medio);color:#fff;box-shadow:0 2px 8px rgba(46,107,158,.3)}
+.progress-dot.active{background:var(--azul-medio);color:#fff;box-shadow:0 0 0 4px rgba(46,107,158,.2);animation:pulse-ring 2s infinite}
+.progress-dot.pending{background:var(--metal-claro);color:var(--metal-oscuro);border:2px solid var(--metal-medio)}
+.progress-line{width:32px;height:3px;border-radius:2px;transition:background .4s ease}
+.progress-line.completed{background:var(--azul-medio)}
+.progress-line.pending{background:var(--metal-medio)}
+@keyframes pulse-ring{0%,100%{box-shadow:0 0 0 4px rgba(46,107,158,.2)}50%{box-shadow:0 0 0 8px rgba(46,107,158,.05)}}
+.step{display:none;animation:fadeSlideIn .35s cubic-bezier(.4,0,.2,1) forwards}
+.step.active{display:block}
+.step.slide-out-left{animation:fadeSlideOutLeft .3s cubic-bezier(.4,0,.2,1) forwards}
+.step.slide-in-right{animation:fadeSlideIn .35s cubic-bezier(.4,0,.2,1) forwards}
+.step.slide-out-right{animation:fadeSlideOutRight .3s cubic-bezier(.4,0,.2,1) forwards}
+.step.slide-in-left{animation:fadeSlideInLeft .35s cubic-bezier(.4,0,.2,1) forwards}
+@keyframes fadeSlideIn{from{opacity:0;transform:translateX(40px)}to{opacity:1;transform:translateX(0)}}
+@keyframes fadeSlideOutLeft{from{opacity:1;transform:translateX(0)}to{opacity:0;transform:translateX(-40px)}}
+@keyframes fadeSlideOutRight{from{opacity:1;transform:translateX(0)}to{opacity:0;transform:translateX(40px)}}
+@keyframes fadeSlideInLeft{from{opacity:0;transform:translateX(-40px)}to{opacity:1;transform:translateX(0)}}
+.card{background:var(--blanco-puro);border-radius:var(--radius-lg);padding:24px 20px;margin-top:20px;box-shadow:var(--shadow-card);border:1px solid rgba(196,209,222,.25)}
+.card-title{font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:20px;color:var(--azul-profundo);display:flex;align-items:center;gap:10px;margin-bottom:24px}
+.card-title .icon{width:36px;height:36px;background:var(--azul-hielo);border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.card-title .icon svg{width:20px;height:20px;color:var(--azul-medio)}
+.section-divider{height:1px;background:var(--gris-suave);margin:24px 0}
+.form-group{margin-bottom:22px}
+.form-label{display:block;font-size:14px;font-weight:500;color:var(--texto-principal);margin-bottom:8px}
+.form-label .required{color:var(--error);margin-left:2px}
+.form-sublabel{font-size:13px;color:var(--texto-secundario);margin-bottom:10px;display:block}
+.input-text{width:100%;height:48px;padding:14px 16px;font-family:'DM Sans',sans-serif;font-size:16px;color:var(--texto-principal);background:var(--blanco-puro);border:1.5px solid var(--metal-medio);border-radius:var(--radius-md);outline:none;transition:all .25s ease}
+.input-text:focus{border-color:var(--azul-medio);box-shadow:0 0 0 3px rgba(46,107,158,.15)}
+.input-text.error{border-color:var(--error);box-shadow:0 0 0 3px rgba(239,68,68,.1)}
+.input-text::placeholder{color:var(--metal-oscuro)}
+textarea.input-text{height:110px;resize:vertical;line-height:1.5}
+.error-message{font-size:13px;color:var(--error);margin-top:6px;display:none;animation:shake .3s ease}
+.error-message.visible{display:block}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
+.two-cols{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.stepper{display:flex;align-items:center;gap:4px;justify-content:center}
+.stepper-btn{width:48px;height:48px;border:none;border-radius:var(--radius-md);background:linear-gradient(145deg,#F0F4F8,#D1D9E6);box-shadow:var(--shadow-raised);color:var(--azul-profundo);font-size:22px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s ease;-webkit-tap-highlight-color:transparent;user-select:none}
+.stepper-btn:active{box-shadow:inset 2px 2px 4px #B8C4D3,inset -1px -1px 2px #FFF;transform:scale(.96)}
+.stepper-value{width:64px;height:48px;display:flex;align-items:center;justify-content:center;font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:22px;color:var(--azul-profundo);background:var(--blanco-hielo);border-radius:var(--radius-sm);box-shadow:var(--shadow-input-inset)}
+.sex-selector{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.sex-option{display:none}
+.sex-label{display:flex;flex-direction:column;align-items:center;justify-content:center;height:64px;border-radius:var(--radius-md);background:linear-gradient(145deg,#F0F4F8,#D1D9E6);box-shadow:var(--shadow-raised);border:2px solid transparent;cursor:pointer;transition:all .25s cubic-bezier(.4,0,.2,1);-webkit-tap-highlight-color:transparent;gap:4px}
+.sex-label svg{width:22px;height:22px;color:var(--azul-profundo);transition:color .25s ease}
+.sex-label span{font-size:14px;font-weight:600;color:var(--azul-profundo);transition:color .25s ease}
+.sex-option:checked+.sex-label{background:linear-gradient(145deg,var(--azul-medio),var(--azul-profundo));box-shadow:var(--shadow-pressed);border-color:rgba(91,164,217,.3)}
+.sex-option:checked+.sex-label svg,.sex-option:checked+.sex-label span{color:#fff}
+.slider-container{padding:8px 0}
+.slider-display{display:flex;justify-content:center;margin-bottom:10px}
+.slider-tooltip{background:var(--azul-profundo);color:#fff;font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:16px;padding:6px 14px;border-radius:var(--radius-xl);min-width:56px;text-align:center;box-shadow:0 4px 12px rgba(27,58,92,.25)}
+input[type="range"]{-webkit-appearance:none;appearance:none;width:100%;height:8px;border-radius:4px;outline:none;background:var(--metal-claro);box-shadow:var(--shadow-input-inset)}
+input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;width:32px;height:32px;border-radius:50%;background:var(--blanco-puro);border:3px solid var(--azul-medio);box-shadow:0 2px 8px rgba(27,58,92,.3);cursor:pointer;transition:transform .15s ease}
+input[type="range"]::-webkit-slider-thumb:active{transform:scale(1.25);box-shadow:0 2px 12px rgba(46,107,158,.4)}
+input[type="range"]::-moz-range-thumb{width:32px;height:32px;border-radius:50%;background:var(--blanco-puro);border:3px solid var(--azul-medio);box-shadow:0 2px 8px rgba(27,58,92,.3);cursor:pointer}
+.slider-labels{display:flex;justify-content:space-between;margin-top:8px;font-size:12px;color:var(--texto-secundario)}
+input[type="range"].slider-anxiety{background:linear-gradient(90deg,#10B981,#F59E0B,#EF4444)}
+input[type="range"].slider-motivation{background:linear-gradient(90deg,var(--azul-hielo),var(--azul-medio),var(--azul-profundo))}
+.toggle-row{display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-bottom:1px solid rgba(226,232,240,.6)}
+.toggle-row:last-child{border-bottom:none}
+.toggle-label-text{font-size:15px;font-weight:500;color:var(--texto-principal);flex:1;padding-right:12px}
+.toggle-switch{position:relative;width:52px;height:28px;flex-shrink:0}
+.toggle-switch input{opacity:0;width:0;height:0}
+.toggle-slider{position:absolute;inset:0;border-radius:var(--radius-full);background:var(--metal-claro);box-shadow:inset 1px 1px 3px #B8C4D3,inset -1px -1px 2px #FFF;cursor:pointer;transition:all .3s cubic-bezier(.4,0,.2,1)}
+.toggle-slider::before{content:'';position:absolute;width:22px;height:22px;border-radius:50%;background:var(--blanco-puro);box-shadow:2px 2px 4px rgba(0,0,0,.12);top:3px;left:3px;transition:all .3s cubic-bezier(.4,0,.2,1)}
+.toggle-switch input:checked+.toggle-slider{background:linear-gradient(135deg,var(--azul-medio),var(--azul-profundo));box-shadow:0 0 12px rgba(46,107,158,.3)}
+.toggle-switch input:checked+.toggle-slider::before{transform:translateX(24px)}
+.chips-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(105px,1fr));gap:10px}
+.chip-input{display:none}
+.chip-label{display:flex;align-items:center;justify-content:center;text-align:center;padding:11px 10px;border-radius:var(--radius-xl);font-size:13px;font-weight:500;color:var(--azul-profundo);background:linear-gradient(145deg,#F0F4F8,#D8E0EA);box-shadow:4px 4px 8px #B8C4D3,-3px -3px 6px #FFF;border:1.5px solid rgba(255,255,255,.6);cursor:pointer;transition:all .2s cubic-bezier(.4,0,.2,1);-webkit-tap-highlight-color:transparent;user-select:none;min-height:44px;gap:6px;line-height:1.2}
+.chip-label:active{transform:scale(.95)}
+.chip-check{display:none;width:16px;height:16px;flex-shrink:0}
+.chip-input:checked+.chip-label{background:linear-gradient(145deg,var(--azul-medio),var(--azul-profundo));box-shadow:var(--shadow-pressed);color:#fff;border-color:rgba(91,164,217,.3)}
+.chip-input:checked+.chip-label .chip-check{display:block;color:#fff;animation:chipCheckIn .2s ease forwards}
+@keyframes chipCheckIn{from{transform:scale(0);opacity:0}to{transform:scale(1);opacity:1}}
+.chip-label.chip-none{border:1.5px dashed var(--metal-medio);background:var(--blanco-hielo);box-shadow:none}
+.chip-input:checked+.chip-label.chip-none{background:linear-gradient(145deg,var(--metal-oscuro),#6B7F95);border-style:solid;color:#fff}
+.btn-group{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.btn-group-input{display:none}
+.btn-group-label{display:flex;align-items:center;justify-content:center;height:52px;border-radius:var(--radius-md);font-size:15px;font-weight:600;color:var(--azul-profundo);background:linear-gradient(145deg,#F0F4F8,#D1D9E6);box-shadow:var(--shadow-raised);border:2px solid transparent;cursor:pointer;transition:all .2s cubic-bezier(.4,0,.2,1);-webkit-tap-highlight-color:transparent}
+.btn-group-label:active{transform:scale(.96)}
+.btn-group-input:checked+.btn-group-label{background:linear-gradient(145deg,var(--azul-medio),var(--azul-profundo));box-shadow:var(--shadow-pressed);color:#fff;border-color:rgba(91,164,217,.3)}
+.info-box{display:flex;gap:10px;padding:12px 14px;border-radius:var(--radius-sm);background:rgba(214,232,247,.4);border-left:3px solid var(--azul-medio);font-size:13px;color:var(--texto-secundario);line-height:1.4;margin-top:12px}
+.info-box svg{width:16px;height:16px;flex-shrink:0;color:var(--azul-medio);margin-top:1px}
+.warning-box{display:none;gap:10px;padding:12px 14px;border-radius:var(--radius-sm);background:rgba(245,158,11,.08);border-left:3px solid var(--advertencia);font-size:13px;color:#92400E;line-height:1.4;margin-bottom:12px;animation:fadeSlideDown .3s ease forwards}
+.warning-box.visible{display:flex}
+.warning-box svg{width:16px;height:16px;flex-shrink:0;color:var(--advertencia);margin-top:1px}
+@keyframes fadeSlideDown{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
+.conditional-section{overflow:hidden;max-height:0;opacity:0;transition:max-height .4s cubic-bezier(.4,0,.2,1),opacity .3s ease,margin .3s ease;margin-top:0}
+.conditional-section.visible{max-height:500px;opacity:1;margin-top:16px}
+.subsection{background:rgba(214,232,247,.2);border-radius:var(--radius-md);padding:18px 16px;border:1px solid rgba(214,232,247,.5)}
+.subsection-title{font-family:'Plus Jakarta Sans',sans-serif;font-weight:600;font-size:15px;color:var(--azul-medio);margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.subsection-title svg{width:18px;height:18px}
+.female-section{overflow:hidden;max-height:0;opacity:0;transition:max-height .5s cubic-bezier(.4,0,.2,1),opacity .35s ease}
+.female-section.visible{max-height:600px;opacity:1}
+.consent-box{background:var(--blanco-puro);border-radius:var(--radius-lg);padding:18px 16px;margin-top:16px;box-shadow:var(--shadow-card);border:1px solid rgba(196,209,222,.25)}
+.consent-label{display:flex;gap:12px;cursor:pointer;align-items:flex-start;-webkit-tap-highlight-color:transparent}
+.consent-checkbox{width:22px;height:22px;border:2px solid var(--metal-medio);border-radius:6px;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .2s ease;margin-top:1px;background:var(--blanco-puro)}
+.consent-checkbox svg{width:14px;height:14px;color:#fff;opacity:0;transform:scale(0);transition:all .2s ease}
+.consent-input{display:none}
+.consent-input:checked~.consent-label .consent-checkbox{background:var(--azul-medio);border-color:var(--azul-medio)}
+.consent-input:checked~.consent-label .consent-checkbox svg{opacity:1;transform:scale(1)}
+.consent-text{font-size:13px;color:var(--texto-secundario);line-height:1.5}
+.consent-link{color:var(--azul-medio);text-decoration:underline;cursor:pointer;font-weight:500}
+.consent-full{max-height:0;overflow:hidden;transition:max-height .3s ease;font-size:12px;color:var(--texto-secundario);line-height:1.5}
+.consent-full.visible{max-height:200px;margin-top:10px}
+.nav-buttons{display:flex;gap:12px;margin-top:24px;padding-bottom:20px}
+.btn{flex:1;height:52px;border:none;border-radius:var(--radius-md);font-family:'DM Sans',sans-serif;font-size:16px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .2s cubic-bezier(.4,0,.2,1);-webkit-tap-highlight-color:transparent}
+.btn:active{transform:scale(.97)}
+.btn-primary{background:linear-gradient(145deg,var(--azul-medio),var(--azul-profundo));color:#fff;box-shadow:0 4px 14px rgba(27,58,92,.3),4px 4px 10px #B8C4D3,-2px -2px 6px #FFF}
+.btn-primary:active{box-shadow:inset 2px 2px 4px rgba(0,0,0,.2)}
+.btn-secondary{background:linear-gradient(145deg,#F0F4F8,#D8E0EA);color:var(--azul-profundo);box-shadow:4px 4px 8px #B8C4D3,-3px -3px 6px #FFF;flex:.6}
+.btn-secondary:active{box-shadow:inset 2px 2px 4px #B8C4D3,inset -1px -1px 2px #FFF}
+.btn-submit{height:56px;font-size:17px}
+.btn svg{width:18px;height:18px}
+.btn:disabled{opacity:.6;cursor:not-allowed;transform:none!important}
+.btn-loading .btn-text{display:none}
+.btn-loading .btn-spinner{display:block}
+.btn .btn-spinner{display:none;width:22px;height:22px;border:3px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.required-note{text-align:center;font-size:12px;color:var(--texto-secundario);margin-top:12px}
+.success-screen{display:none;text-align:center;padding:60px 20px;animation:fadeIn .5s ease forwards}
+.success-screen.active{display:block}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.success-circle{width:88px;height:88px;border-radius:50%;background:linear-gradient(135deg,var(--exito),#059669);display:flex;align-items:center;justify-content:center;margin:0 auto 24px;box-shadow:0 8px 30px rgba(16,185,129,.3);animation:bounceIn .6s cubic-bezier(.68,-.55,.265,1.55) forwards}
+.success-circle svg{width:40px;height:40px;color:#fff;stroke-width:3}
+@keyframes bounceIn{0%{transform:scale(0)}60%{transform:scale(1.15)}100%{transform:scale(1)}}
+.success-title{font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:24px;color:var(--azul-profundo);margin-bottom:12px}
+.success-text{font-size:16px;color:var(--texto-secundario);line-height:1.6;margin-bottom:32px}
+.success-divider{width:60px;height:2px;background:var(--gris-suave);margin:0 auto 24px}
+.success-contact{font-size:14px;color:var(--texto-secundario);margin-bottom:12px}
+.success-phone{display:inline-flex;align-items:center;gap:8px;color:var(--azul-medio);font-weight:600;font-size:18px;text-decoration:none}
+.success-phone svg{width:20px;height:20px}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+@media(min-width:641px){.app-container{max-width:520px}.card{padding:28px 24px}}
+  </style>
+</head>
+<body>
+<div class="app-container">
+
+<!-- HEADER -->
+<header class="app-header">
+  <div class="clinic-brand">
+    <div class="clinic-logo">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M9 8h1"/><path d="M9 12h1"/><path d="M9 16h1"/><path d="M14 8h1"/><path d="M14 12h1"/><path d="M14 16h1"/><path d="M5 21V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16"/></svg>
+    </div>
+    <div class="clinic-info">
+      <h1>Clínica Ejemplo</h1>
+      <p>Datos para tu primera consulta</p>
+    </div>
+  </div>
+  <div class="progress-bar" id="progressBar">
+    <div class="progress-dot active" data-step="1">1</div>
+    <div class="progress-line pending" data-line="1"></div>
+    <div class="progress-dot pending" data-step="2">2</div>
+    <div class="progress-line pending" data-line="2"></div>
+    <div class="progress-dot pending" data-step="3">3</div>
+    <div class="progress-line pending" data-line="3"></div>
+    <div class="progress-dot pending" data-step="4">4</div>
+    <div class="progress-line pending" data-line="4"></div>
+    <div class="progress-dot pending" data-step="5">5</div>
+  </div>
+</header>
+
+<div class="steps-wrapper" id="stepsWrapper">
+<!-- STEP 1 -->
+<div class="step active" data-step="1">
+  <div class="card">
+    <div class="card-title"><div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>Datos Personales</div>
+    <div class="form-group">
+      <label class="form-label" for="nombre">Nombre y Apellidos <span class="required">*</span></label>
+      <input type="text" class="input-text" id="nombre" placeholder="Ej: María García López" autocomplete="name" autocapitalize="words">
+      <div class="error-message" id="nombreError">Este campo es obligatorio</div>
+    </div>
+    <div class="two-cols">
+      <div class="form-group">
+        <label class="form-label">Edad <span class="required">*</span></label>
+        <div class="stepper">
+          <button type="button" class="stepper-btn" onclick="changeStepper('edad',-1)">−</button>
+          <div class="stepper-value" id="edadDisplay">40</div>
+          <button type="button" class="stepper-btn" onclick="changeStepper('edad',1)">+</button>
+        </div>
+        <input type="hidden" id="edad" value="40">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Sexo <span class="required">*</span></label>
+        <div class="sex-selector">
+          <input type="radio" name="sexo" value="hombre" id="sexoH" class="sex-option" onchange="handleSexChange()">
+          <label for="sexoH" class="sex-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="10" cy="14" r="5"/><path d="M19 5l-4.5 4.5M19 5h-4M19 5v4"/></svg><span>Hombre</span></label>
+          <input type="radio" name="sexo" value="mujer" id="sexoM" class="sex-option" onchange="handleSexChange()">
+          <label for="sexoM" class="sex-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="5"/><path d="M12 13v8M9 18h6"/></svg><span>Mujer</span></label>
+        </div>
+        <div class="error-message" id="sexoError">Seleccione una opción</div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Peso actual (kg) <span class="required">*</span></label>
+      <div class="slider-container">
+        <div class="slider-display"><div class="slider-tooltip" id="pesoDisplay">75.0 kg</div></div>
+        <input type="range" min="40" max="200" step="0.5" value="75" id="peso" oninput="updateSlider('peso',this.value,' kg')">
+        <div class="slider-labels"><span>40 kg</span><span>200 kg</span></div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Menor peso en los últimos 5 años (kg)</label>
+      <div class="slider-container">
+        <div class="slider-display"><div class="slider-tooltip" id="menorPesoDisplay">65.0 kg</div></div>
+        <input type="range" min="40" max="200" step="0.5" value="65" id="menorPeso" oninput="updateSlider('menorPeso',this.value,' kg')">
+        <div class="slider-labels"><span>40 kg</span><span>200 kg</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="nav-buttons">
+    <button type="button" class="btn btn-primary" onclick="goToStep(2)"><span class="btn-text">Siguiente</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></button>
+  </div>
+  <p class="required-note">Los campos marcados con * son obligatorios</p>
+</div>
+
+<!-- STEP 2 -->
+<div class="step" data-step="2">
+  <div class="card">
+    <div class="card-title"><div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M9 8h1"/><path d="M9 12h1"/><path d="M9 16h1"/><path d="M14 8h1"/><path d="M14 12h1"/><path d="M14 16h1"/><path d="M5 21V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16"/></svg></div>Condiciones Médicas</div>
+    <div class="toggle-row"><span class="toggle-label-text">Hipertensión arterial</span><label class="toggle-switch"><input type="checkbox" id="hipertension" onchange="updateConditionWarnings()"><span class="toggle-slider"></span></label></div>
+    <div class="toggle-row"><span class="toggle-label-text">Hipotiroidismo</span><label class="toggle-switch"><input type="checkbox" id="hipotiroidismo" onchange="updateConditionWarnings()"><span class="toggle-slider"></span></label></div>
+    <div class="toggle-row"><span class="toggle-label-text">Colesterol</span><label class="toggle-switch"><input type="checkbox" id="colesterol" onchange="updateConditionWarnings()"><span class="toggle-slider"></span></label></div>
+    <div class="section-divider"></div>
+    <div class="form-group">
+      <label class="form-label">Enfermedades que padece</label>
+      <span class="form-sublabel">Seleccione todas las que apliquen</span>
+      <div class="chips-grid" id="enfermedadesChips">
+        <input type="checkbox" class="chip-input" id="enf_dt1" value="Diabetes T1" data-group="enfermedades"><label for="enf_dt1" class="chip-label"><svg class="chip-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>Diabetes T1</label>
+        <input type="checkbox" class="chip-input" id="enf_dt2" value="Diabetes T2" data-group="enfermedades"><label for="enf_dt2" class="chip-label"><svg class="chip-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>Diabetes T2</label>
+        <input type="checkbox" class="chip-input" id="enf_asma" value="Asma" data-group="enfermedades"><label for="enf_asma" class="chip-label"><svg class="chip-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>Asma</label>
+        <input type="checkbox" class="chip-input" id="enf_artrosis" value="Artrosis" data-group="enfermedades"><label for="enf_artrosis" class="chip-label"><svg class="chip-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>Artrosis</label>
+        <input type="checkbox" class="chip-input" id="enf_depresion" value="Depresión" data-group="enfermedades"><label for="enf_depresion" class="chip-label"><svg class="chip-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>Depresión</label>
+        <input type="checkbox" class="chip-input" id="enf_ansiedad" value="Ansiedad" data-group="enfermedades"><label for="enf_ansiedad" class="chip-label"><svg class="chip-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>Ansiedad</label>
+        <input type="checkbox" class="chip-input" id="enf_epoc" value="EPOC" data-group="enfermedades"><label for="enf_epoc" class="chip-label"><svg class="chip-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>EPOC</label>
+        <input type="checkbox" class="chip-input" id="enf_migranas" value="Migrañas" data-group="enfermedades"><label for="enf_migranas" class="chip-label"><svg class="chip-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>Migrañas</label>
+        <input type="checkbox" class="chip-input" id="enf_fibro" value="Fibromialgia" data-group="enfermedades"><label for="enf_fibro" class="chip-label"><svg class="chip-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>Fibromialgia</label>
+        <input type="checkbox" class="chip-input" id="enf_apnea" value="Apnea del sueño" data-group="enfermedades"><label for="enf_apnea" class="chip-label"><svg class="chip-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>Apnea sueño</label>
+        <input type="checkbox" class="chip-input" id="enf_ninguna" value="Ninguna" data-group="enfermedades" data-exclusive="true"><label for="enf_ninguna" class="chip-label chip-none"><svg class="chip-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>Ninguna</label>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label" for="enfermedadesOtras">Otras enfermedades</label>
+      <input type="text" class="input-text" id="enfermedadesOtras" placeholder="Escriba aquí si tiene alguna no listada...">
+    </div>
+  </div>
+  <div class="nav-buttons">
+    <button type="button" class="btn btn-secondary" onclick="goToStep(1)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg><span class="btn-text">Atrás</span></button>
+    <button type="button" class="btn btn-primary" onclick="goToStep(3)"><span class="btn-text">Siguiente</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></button>
+  </div>
+</div>
+
+<!-- STEP 3 -->
+<div class="step" data-step="3">
+  <div class="card">
+    <div class="card-title"><div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m10.5 20.5 10-10a4.95 4.95 0 1 0-7-7l-10 10a4.95 4.95 0 1 0 7 7Z"/><path d="m8.5 8.5 7 7"/></svg></div>Historial y Fármacos</div>
+    <div class="form-group">
+      <label class="form-label">Operaciones previas</label>
+      <span class="form-sublabel">Seleccione todas las que apliquen</span>
+      <div class="chips-grid">
+        <input type="checkbox" class="chip-input" id="op_apen" value="Apendicectomía" data-group="operaciones"><label for="op_apen" class="chip-label"><svg class="chip-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>Apendicect.</label>
+        <input type="checkbox" class="chip-input" id="op_cesarea" value="Cesárea" data-group="operaciones"><label for="op_cesarea" class="chip-label"><svg class="chip-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>Cesárea</label>
+        <input type="checkbox" class="chip-input" id="op_rodilla" value="Rodilla" data-group="operaciones"><label for="op_rodilla" class="chip-label"><svg class="chip-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>Rodilla</label>
+        <input type="checkbox" class="chip-input" id="op_cadera" value="Cadera" data-group="operaciones"><label for="op_cadera" class="chip-label"><svg class="chip-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>Cadera</label>
+        <input type="checkbox" class="chip-input" id="op_vesicula" value="Vesícula" data-group="operaciones"><label for="op_vesicula" class="chip-label"><svg class="chip-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>Vesícula</label>
+        <input type="checkbox" class="chip-input" id="op_hernia" value="Hernia" data-group="operaciones"><label for="op_hernia" class="chip-label"><svg class="chip-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>Hernia</label>
+        <input type="checkbox" class="chip-input" id="op_bgastrica" value="B. gástrica" data-group="operaciones"><label for="op_bgastrica" class="chip-label"><svg class="chip-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>B. gástrica</label>
+        <input type="checkbox" class="chip-input" id="op_tiroides" value="Tiroides" data-group="operaciones"><label for="op_tiroides" class="chip-label"><svg class="chip-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>Tiroides</label>
+        <input type="checkbox" class="chip-input" id="op_columna" value="Columna" data-group="operaciones"><label for="op_columna" class="chip-label"><svg class="chip-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>Columna</label>
+        <input type="checkbox" class="chip-input" id="op_ninguna" value="Ninguna" data-group="operaciones" data-exclusive="true"><label for="op_ninguna" class="chip-label chip-none"><svg class="chip-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>Ninguna</label>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label" for="operacionesOtras">Otras operaciones</label>
+      <input type="text" class="input-text" id="operacionesOtras" placeholder="Escriba aquí si tiene alguna no listada...">
+    </div>
+    <div class="section-divider"></div>
+    <div class="warning-box" id="medicationWarning"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg><span id="medicationWarningText"></span></div>
+    <div class="form-group">
+      <label class="form-label" for="farmacos">Fármacos que toma actualmente</label>
+      <textarea class="input-text" id="farmacos" placeholder="Ej: Eutirox 50mg, Omeprazol 20mg, Metformina 850mg..."></textarea>
+      <div class="info-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg><span>Incluya nombre y dosis de cada medicamento</span></div>
+    </div>
+  </div>
+  <div class="nav-buttons">
+    <button type="button" class="btn btn-secondary" onclick="goToStep(2)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg><span class="btn-text">Atrás</span></button>
+    <button type="button" class="btn btn-primary" onclick="goToStep(4)"><span class="btn-text">Siguiente</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></button>
+  </div>
+</div>
+<!-- STEP 4 -->
+<div class="step" data-step="4">
+  <div class="card">
+    <div class="card-title"><div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 15c6.667-6 13.333 0 20-6"/><path d="M9 22c1.798-1.998 2.518-3.995 2.807-5.993"/><path d="M15 2c-1.798 1.998-2.518 3.995-2.807 5.993"/></svg></div>Antecedentes</div>
+    <div class="toggle-row"><span class="toggle-label-text">Antecedentes familiares de diabetes</span><label class="toggle-switch"><input type="checkbox" id="antecDiabetes" onchange="toggleSection('parentescoSection',this.checked)"><span class="toggle-slider"></span></label></div>
+    <div class="conditional-section" id="parentescoSection">
+      <div class="subsection">
+        <div class="subsection-title">¿Quién?</div>
+        <div class="chips-grid">
+          <input type="checkbox" class="chip-input" id="par_padre" value="Padre" data-group="parentesco"><label for="par_padre" class="chip-label"><svg class="chip-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>Padre</label>
+          <input type="checkbox" class="chip-input" id="par_madre" value="Madre" data-group="parentesco"><label for="par_madre" class="chip-label"><svg class="chip-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>Madre</label>
+          <input type="checkbox" class="chip-input" id="par_hermano" value="Hermano/a" data-group="parentesco"><label for="par_hermano" class="chip-label"><svg class="chip-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>Hermano/a</label>
+          <input type="checkbox" class="chip-input" id="par_abuelo" value="Abuelo/a" data-group="parentesco"><label for="par_abuelo" class="chip-label"><svg class="chip-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>Abuelo/a</label>
+          <input type="checkbox" class="chip-input" id="par_otro" value="Otro" data-group="parentesco"><label for="par_otro" class="chip-label"><svg class="chip-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>Otro</label>
+        </div>
+      </div>
+    </div>
+    <div class="section-divider"></div>
+    <div class="toggle-row"><span class="toggle-label-text">Tratamientos de fertilidad</span><label class="toggle-switch"><input type="checkbox" id="fertilidad"><span class="toggle-slider"></span></label></div>
+    <div class="female-section" id="femaleSection">
+      <div class="section-divider"></div>
+      <div class="subsection">
+        <div class="subsection-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="5"/><path d="M12 13v8M9 18h6"/></svg>Salud Femenina</div>
+        <div class="toggle-row"><span class="toggle-label-text">Ovario poliquístico</span><label class="toggle-switch"><input type="checkbox" id="ovarioPoliquistico"><span class="toggle-slider"></span></label></div>
+        <div class="toggle-row"><span class="toggle-label-text">Menopausia</span><label class="toggle-switch"><input type="checkbox" id="menopausia"><span class="toggle-slider"></span></label></div>
+        <div class="toggle-row"><span class="toggle-label-text">Reglas irregulares</span><label class="toggle-switch"><input type="checkbox" id="reglasIrregulares"><span class="toggle-slider"></span></label></div>
+        <div class="toggle-row"><span class="toggle-label-text">Endometriosis</span><label class="toggle-switch"><input type="checkbox" id="endometriosis"><span class="toggle-slider"></span></label></div>
+      </div>
+    </div>
+  </div>
+  <div class="nav-buttons">
+    <button type="button" class="btn btn-secondary" onclick="goToStep(3)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg><span class="btn-text">Atrás</span></button>
+    <button type="button" class="btn btn-primary" onclick="goToStep(5)"><span class="btn-text">Siguiente</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></button>
+  </div>
+</div>
+
+<!-- STEP 5 -->
+<div class="step" data-step="5">
+  <div class="card">
+    <div class="card-title"><div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z"/><path d="M12 5a3 3 0 1 1 5.997.125 4 4 0 0 1 2.526 5.77 4 4 0 0 1-.556 6.588A4 4 0 1 1 12 18Z"/><path d="M15 13a4.5 4.5 0 0 1-3-4 4.5 4.5 0 0 1-3 4"/></svg></div>Estado Emocional</div>
+    <div class="form-group">
+      <label class="form-label">Nivel de ansiedad</label>
+      <div class="slider-container">
+        <div class="slider-display"><div class="slider-tooltip" id="ansiedadDisplay">5</div></div>
+        <input type="range" min="0" max="10" step="1" value="5" id="ansiedad" class="slider-anxiety" oninput="updateSlider('ansiedad',this.value,'')">
+        <div class="slider-labels"><span>Tranquilo</span><span>Muy ansioso</span></div>
+      </div>
+    </div>
+    <div class="section-divider"></div>
+    <div class="form-group">
+      <label class="form-label">Control sobre la comida</label>
+      <div class="btn-group">
+        <input type="radio" name="controlComida" value="bajo" id="controlBajo" class="btn-group-input"><label for="controlBajo" class="btn-group-label">Bajo</label>
+        <input type="radio" name="controlComida" value="medio" id="controlMedio" class="btn-group-input"><label for="controlMedio" class="btn-group-label">Medio</label>
+        <input type="radio" name="controlComida" value="alto" id="controlAlto" class="btn-group-input"><label for="controlAlto" class="btn-group-label">Alto</label>
+      </div>
+      <div class="error-message" id="controlError">Seleccione una opción</div>
+    </div>
+    <div class="section-divider"></div>
+    <div class="form-group">
+      <label class="form-label">Motivación por adelgazar</label>
+      <div class="slider-container">
+        <div class="slider-display"><div class="slider-tooltip" id="motivacionDisplay">5</div></div>
+        <input type="range" min="1" max="10" step="1" value="5" id="motivacion" class="slider-motivation" oninput="updateSlider('motivacion',this.value,'')">
+        <div class="slider-labels"><span>Baja</span><span>Muy alta</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="consent-box">
+    <input type="checkbox" class="consent-input" id="consentimiento">
+    <label class="consent-label" for="consentimiento">
+      <div class="consent-checkbox"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+      <div class="consent-text">He leído y acepto el tratamiento de mis datos de salud conforme al RGPD. <span class="consent-link" onclick="event.preventDefault();toggleConsent()">Ver política completa</span></div>
+    </label>
+    <div class="consent-full" id="consentFull">Al enviar este formulario, consiento el tratamiento de mis datos de salud por parte de la clínica con la única finalidad de preparar mi consulta médica. Estos datos serán tratados conforme al RGPD (UE 2016/679) y la LOPDGDD (LO 3/2018). Puedo ejercer mis derechos de acceso, rectificación, supresión y portabilidad contactando con la clínica.</div>
+    <div class="error-message" id="consentError">Debe aceptar la política de privacidad</div>
+  </div>
+
+  <div class="nav-buttons">
+    <button type="button" class="btn btn-secondary" onclick="goToStep(4)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg><span class="btn-text">Atrás</span></button>
+    <button type="button" class="btn btn-primary btn-submit" id="submitBtn" onclick="submitForm()"><span class="btn-text"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:20px;height:20px"><polyline points="20 6 9 17 4 12"/></svg>Enviar datos</span><div class="btn-spinner"></div></button>
+  </div>
+</div>
+
+</div><!-- /steps-wrapper -->
+<!-- SUCCESS SCREEN -->
+<div class="success-screen" id="successScreen">
+  <div class="success-circle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+  <h2 class="success-title">¡Datos enviados correctamente!</h2>
+  <p class="success-text">Hemos recibido tu información.<br>La revisaremos antes de tu consulta.</p>
+  <div class="success-divider"></div>
+  <p class="success-contact">Si necesitas modificar algún dato:</p>
+  <a href="tel:+34600000000" class="success-phone"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>600 000 000</a>
+</div>
+
+<!-- ERROR SCREEN -->
+<div class="success-screen" id="errorScreen">
+  <div class="success-circle" style="background:linear-gradient(135deg,var(--error),#DC2626)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:40px;height:40px;color:#fff"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+  </div>
+  <h2 class="success-title">Enlace no válido</h2>
+  <p class="success-text" id="errorText">Este enlace ha caducado o ya ha sido utilizado.<br>Contacte con la clínica para recibir uno nuevo.</p>
+  <div class="success-divider"></div>
+  <a href="tel:+34600000000" class="success-phone"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>600 000 000</a>
+</div>
+
+<!-- LOADING SCREEN -->
+<div id="loadingScreen" style="text-align:center;padding:80px 20px">
+  <div style="width:40px;height:40px;border:4px solid var(--metal-claro);border-top-color:var(--azul-medio);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 20px"></div>
+  <p style="color:var(--texto-secundario);font-size:15px">Cargando formulario...</p>
+</div>
+
+</div><!-- /app-container -->
+
+<script>
+const SUPABASE_URL='https://bpazmmbjjducdmxgfoum.supabase.co';
+const SUPABASE_ANON_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJwYXptbWJqamR1Y2RteGdmb3VtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njc4MjY1MTksImV4cCI6MjA4MzQwMjUxOX0.uZd2m7JMXd_i-bZVsTQTcqTEhJMxLXwvdPLK74h07Kw';
+const WEBHOOK_URL='https://n8n.nexthorizont.ai/webhook/formulario-clinico';
+
+let currentStep=1;const totalSteps=5;let accessToken=null;
+
+async function sbReq(path,opts={}){const r=await fetch(`${SUPABASE_URL}/rest/v1/${path}`,{...opts,headers:{'apikey':SUPABASE_ANON_KEY,'Authorization':`Bearer ${SUPABASE_ANON_KEY}`,'Content-Type':'application/json','Prefer':opts.prefer||'return=representation',...opts.headers}});if(!r.ok)throw new Error(r.status);return r.json()}
+
+async function initApp(){
+  const params=new URLSearchParams(window.location.search);
+  const token=params.get('t');
+  const loading=document.getElementById('loadingScreen');
+  const errScr=document.getElementById('errorScreen');
+  const header=document.querySelector('.app-header');
+  const steps=document.getElementById('stepsWrapper');
+  header.style.display='none';steps.style.display='none';
+
+  if(!token){loading.style.display='none';errScr.classList.add('active');document.getElementById('errorText').innerHTML='No se ha proporcionado un enlace válido.<br>Contacte con la clínica para recibir su enlace.';return}
+
+  try{
+    const data=await sbReq(`clinica_enlaces_pacientes?token=eq.${token}&usado=eq.false&expira_at=gt.${new Date().toISOString()}&select=id,nombre_paciente,token`);
+    if(!data||data.length===0){loading.style.display='none';errScr.classList.add('active');return}
+    accessToken=token;
+    const name=data[0].nombre_paciente||'';
+    const inp=document.getElementById('nombre');
+    if(name){inp.value=name;inp.setAttribute('readonly',true);inp.style.background='var(--azul-hielo)';inp.style.fontWeight='600'}
+    loading.style.display='none';header.style.display='';steps.style.display='';updateProgress()
+  }catch(e){console.error(e);loading.style.display='none';errScr.classList.add('active')}
+}
+
+function goToStep(step){if(step>currentStep&&!validateStep(currentStep))return;const dir=step>currentStep?'forward':'backward';const cur=document.querySelector(`.step[data-step="${currentStep}"]`);const nxt=document.querySelector(`.step[data-step="${step}"]`);cur.classList.remove('active');cur.style.display='block';cur.classList.add(dir==='forward'?'slide-out-left':'slide-out-right');setTimeout(()=>{cur.style.display='none';cur.classList.remove('slide-out-left','slide-out-right');nxt.style.display='block';nxt.classList.add('active',dir==='forward'?'slide-in-right':'slide-in-left');setTimeout(()=>nxt.classList.remove('slide-in-right','slide-in-left'),350);currentStep=step;updateProgress();window.scrollTo({top:0,behavior:'smooth'})},300)}
+
+function updateProgress(){for(let i=1;i<=totalSteps;i++){const d=document.querySelector(`.progress-dot[data-step="${i}"]`);const l=document.querySelector(`.progress-line[data-line="${i}"]`);d.classList.remove('completed','active','pending');if(i<currentStep){d.classList.add('completed');d.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" style="width:14px;height:14px"><polyline points="20 6 9 17 4 12"/></svg>'}else if(i===currentStep){d.classList.add('active');d.textContent=i}else{d.classList.add('pending');d.textContent=i}if(l){l.classList.remove('completed','pending');l.classList.add(i<currentStep?'completed':'pending')}}}
+
+function validateStep(s){clearErrors();let v=true;if(s===1){if(document.getElementById('nombre').value.trim().length<3){showError('nombre','nombreError');v=false}if(!document.querySelector('input[name="sexo"]:checked')){document.getElementById('sexoError').classList.add('visible');v=false}}if(s===5){if(!document.querySelector('input[name="controlComida"]:checked')){document.getElementById('controlError').classList.add('visible');v=false}}return v}
+function showError(a,b){document.getElementById(a).classList.add('error');document.getElementById(b).classList.add('visible')}
+function clearErrors(){document.querySelectorAll('.error').forEach(e=>e.classList.remove('error'));document.querySelectorAll('.error-message').forEach(e=>e.classList.remove('visible'))}
+
+function changeStepper(id,d){const i=document.getElementById(id);let v=parseInt(i.value)+d;v=Math.max(1,Math.min(120,v));i.value=v;document.getElementById(id+'Display').textContent=v}
+let stepperInterval;document.querySelectorAll('.stepper-btn').forEach(b=>{b.addEventListener('mousedown',()=>{stepperInterval=setInterval(()=>b.click(),120)});b.addEventListener('mouseup',()=>clearInterval(stepperInterval));b.addEventListener('mouseleave',()=>clearInterval(stepperInterval));b.addEventListener('touchstart',()=>{stepperInterval=setInterval(()=>b.click(),120)},{passive:true});b.addEventListener('touchend',()=>clearInterval(stepperInterval))});
+
+function updateSlider(id,val,suf){document.getElementById(id+'Display').textContent=parseFloat(val).toFixed(suf===' kg'?1:0)+suf}
+function handleSexChange(){const s=document.querySelector('input[name="sexo"]:checked');const f=document.getElementById('femaleSection');s&&s.value==='mujer'?f.classList.add('visible'):f.classList.remove('visible')}
+
+document.querySelectorAll('.chip-input').forEach(c=>{c.addEventListener('change',function(){const g=this.dataset.group;if(this.dataset.exclusive==='true'&&this.checked){document.querySelectorAll(`.chip-input[data-group="${g}"]:not([data-exclusive])`).forEach(x=>x.checked=false)}else if(this.dataset.exclusive!=='true'&&this.checked){const n=document.querySelector(`.chip-input[data-group="${g}"][data-exclusive]`);if(n)n.checked=false}})});
+
+function toggleSection(id,show){const s=document.getElementById(id);show?s.classList.add('visible'):s.classList.remove('visible')}
+function updateConditionWarnings(){const c=[];if(document.getElementById('hipertension').checked)c.push('Hipertensión');if(document.getElementById('hipotiroidismo').checked)c.push('Hipotiroidismo');if(document.getElementById('colesterol').checked)c.push('Colesterol');const w=document.getElementById('medicationWarning');const t=document.getElementById('medicationWarningText');if(c.length>0){t.textContent=`Ha indicado ${c.join(', ')}. Recuerde incluir su medicación para ${c.length>1?'estas condiciones':'esta condición'}.`;w.classList.add('visible')}else{w.classList.remove('visible')}}
+function toggleConsent(){document.getElementById('consentFull').classList.toggle('visible')}
+
+function collectFormData(){const ch=g=>Array.from(document.querySelectorAll(`.chip-input[data-group="${g}"]:checked:not([data-exclusive])`)).map(c=>c.value);const sx=document.querySelector('input[name="sexo"]:checked');const ct=document.querySelector('input[name="controlComida"]:checked');return{nombre_apellidos:document.getElementById('nombre').value.trim(),edad:parseInt(document.getElementById('edad').value),sexo:sx?sx.value:'',peso_actual:parseFloat(document.getElementById('peso').value),menor_peso_5_anios:parseFloat(document.getElementById('menorPeso').value),hipertension:document.getElementById('hipertension').checked,hipotiroidismo:document.getElementById('hipotiroidismo').checked,colesterol:document.getElementById('colesterol').checked,enfermedades_chips:ch('enfermedades'),enfermedades_otras:document.getElementById('enfermedadesOtras').value.trim()||null,operaciones_chips:ch('operaciones'),operaciones_otras:document.getElementById('operacionesOtras').value.trim()||null,farmacos:document.getElementById('farmacos').value.trim()||null,antecedentes_diabetes:document.getElementById('antecDiabetes').checked,antecedentes_diabetes_parentesco:ch('parentesco'),ovario_poliquistico:document.getElementById('ovarioPoliquistico').checked,menopausia:document.getElementById('menopausia').checked,reglas_irregulares:document.getElementById('reglasIrregulares').checked,endometriosis:document.getElementById('endometriosis').checked,tratamientos_fertilidad:document.getElementById('fertilidad').checked,nivel_ansiedad:parseInt(document.getElementById('ansiedad').value),control_comida:ct?ct.value:'',motivacion_adelgazar:parseInt(document.getElementById('motivacion').value),token_acceso:accessToken}}
+
+async function submitForm(){if(!validateStep(5))return;if(!document.getElementById('consentimiento').checked){document.getElementById('consentError').classList.add('visible');return}const btn=document.getElementById('submitBtn');btn.classList.add('btn-loading');btn.disabled=true;const data=collectFormData();try{const r=await fetch(WEBHOOK_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)});if(!r.ok)throw new Error('err');if(accessToken){sbReq(`clinica_enlaces_pacientes?token=eq.${accessToken}`,{method:'PATCH',body:JSON.stringify({usado:true})}).catch(()=>{})}document.getElementById('stepsWrapper').style.display='none';document.querySelector('.app-header').style.display='none';document.querySelectorAll('.nav-buttons').forEach(e=>e.style.display='none');const cb=document.querySelector('.consent-box');if(cb)cb.style.display='none';document.getElementById('successScreen').classList.add('active')}catch(e){console.error(e);btn.classList.remove('btn-loading');btn.disabled=false;alert('Error al enviar los datos. Por favor, inténtelo de nuevo.')}}
+
+document.addEventListener('DOMContentLoaded',()=>{initApp();document.querySelectorAll('.input-text').forEach(i=>{i.addEventListener('input',()=>{i.classList.remove('error');const e=i.parentElement.querySelector('.error-message');if(e)e.classList.remove('visible')})})});
+</script>
+</body>
+</html>
