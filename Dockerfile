@@ -1,13 +1,9 @@
 FROM nginx:alpine
 
-# Remove default nginx page
-RUN rm -rf /usr/share/nginx/html/*
+RUN rm -rf /usr/share/nginx/html/* /etc/nginx/conf.d/default.conf
 
-# Copy our files
-COPY index.html /usr/share/nginx/html/index.html
-COPY admin.html /usr/share/nginx/html/admin.html
-
-# Custom nginx config for SPA
 COPY nginx.conf /etc/nginx/conf.d/default.conf
+COPY index.html /app/index.html
+COPY admin.html /app/admin.html
 
 EXPOSE 80
