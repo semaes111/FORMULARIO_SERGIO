@@ -1,0 +1,9 @@
+# robots.txt — Formulario clínico privado
+# Clínica Dr. Sergio Martínez (NextHorizont)
+#
+# Este formulario sólo se accede mediante enlace personalizado enviado
+# por el profesional al paciente vía WhatsApp. Todas las URLs contienen
+# un token único de un solo uso. No debe indexarse ninguna ruta.
+
+User-agent: *
+Disallow: /
