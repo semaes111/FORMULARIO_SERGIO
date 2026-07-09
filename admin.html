@@ -138,14 +138,16 @@ let lastPatientName = '';
 // ========================================
 async function supabaseRequest(path, options = {}) {
   const url = `${SUPABASE_URL}/rest/v1/${path}`;
-  const headers = {
+  // Object.assign en lugar de object-spread (ES2018): el script entero
+  // parsea en navegadores desde 2017 (Safari 10.1+/Chrome 55+). Con spread,
+  // los dispositivos antiguos fallaban al PARSEAR y el botón no hacía nada.
+  const headers = Object.assign({
     'apikey': SUPABASE_ANON_KEY,
     'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
     'Content-Type': 'application/json',
-    'Prefer': options.prefer || 'return=representation',
-    ...options.headers
-  };
-  const res = await fetch(url, { ...options, headers });
+    'Prefer': options.prefer || 'return=representation'
+  }, options.headers);
+  const res = await fetch(url, Object.assign({}, options, { headers: headers }));
   if (!res.ok) {
     const err = await res.text();
     throw new Error(`Supabase error: ${res.status} — ${err}`);
@@ -205,7 +207,9 @@ async function generateLink() {
 
   } catch (err) {
     console.error('Error generating link:', err);
-    alert('Error al generar el enlace. Inténtelo de nuevo.');
+    // Mostrar la causa real: permite distinguir en cada dispositivo entre
+    // red/bloqueador ("Failed to fetch") y errores de Supabase (401, RLS…).
+    alert('Error al generar el enlace.\n\nDetalle: ' + (err && err.message ? err.message : err));
   } finally {
     btn.classList.remove('loading');
     btn.disabled = false;
@@ -225,8 +229,9 @@ async function copyLink() {
       btn.classList.remove('copied');
       document.getElementById('copyText').textContent = 'Copiar';
     }, 2000);
-  } catch {
-    // Fallback
+  } catch (e) {
+    // Fallback (catch con parámetro: el "optional catch binding" es ES2019
+    // y rompía el parseo del script completo en navegadores antiguos)
     const input = document.getElementById('linkOutput');
     input.select();
     document.execCommand('copy');
